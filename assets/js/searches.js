@@ -1,4 +1,4 @@
-// Carga los artículos desde el archivo JSON y los muestra en la página
+//// Carga los artículos desde el archivo JSON y los muestra en la página
 function loadArticles() {
     fetch('assets/articles.json')
         .then(response => response.json())
@@ -10,7 +10,7 @@ function loadArticles() {
                         <a href="${article.url}" class="image fit thumb"><img src="${article.image}" alt="${article.title}" /></a>
                         <h3>${article.title}</h3>
                         <div class="tags">
-                            ${article.tags.map(tag => `<span>${tag}</span>`).join(' ')}
+                            ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join(' ')}
                         </div>
                     </article>
                 `;
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         articles.forEach(function(article) {
             var title = article.querySelector('h3').textContent.toLowerCase();
-            var tags = Array.from(article.querySelectorAll('.tags span')).map(function(span) {
+            var tags = Array.from(article.querySelectorAll('.tags .tag')).map(function(span) {
                 return span.textContent.toLowerCase();
             });
 

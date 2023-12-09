@@ -7,14 +7,18 @@
         <link rel="stylesheet" href="../assets/css/main.css" />
         <style>
             .tag {
-                font-weight: bold; /* Hace las etiquetas en negritas */
+                font-weight: bold;
                 margin-right: 10px;
-                display: inline-block; /* Asegura que los tags se muestren en línea */
+                display: inline-block;
             }
             .tag:before {
-                content: '\1F4C1'; /* Símbolo de etiqueta */
+                content: '\1F4C1';
                 margin-right: 5px;
             }
+            img.responsive {
+        max-width: 100%;
+        height: auto;
+    }
         </style>
     </head>
     <body>
@@ -39,15 +43,17 @@
                     <span class="tag">Information Leakage</span>
                 </div>
 
-                <p><br>Este es mi write-up detallado para la máquina Photobomb de Hack The Box. En este documento, describiré los pasos y métodos que utilicé para obtener acceso y eventualmente escalar privilegios en la máquina.</p>
+                <p><br>This is my detailed write-up for the Photobomb machine on Hack The Box. In this document, I will describe the steps and methods I used to gain access and eventually escalate privileges on the machine.</p>
 
-                <!-- Introducción -->
-                <h3>Introducción</h3>
-                <p>Descripción general de la máquina, sus objetivos y tu enfoque inicial.</p>
+                <!-- Introduction -->
+                <h3>Introduction</h3>
+                <p>Photobomb is a beginner-level Linux machine designed to provide a hands-on experience in cybersecurity. In this setup, users will have the opportunity to apply their skills in identifying and exploiting common vulnerabilities. The machine focuses on authentication and credential handling, as well as examining specific functionalities of web applications. Additionally, participants will explore privilege escalation techniques through system scripting configurations and usage. This machine offers a realistic and safe environment for those interested in learning more about cybersecurity and penetration testing.</p>
 
-                <!-- Reconocimiento -->
-                <h3>Reconocimiento</h3>
-                <p>Detalles sobre el escaneo de puertos, detección de servicios y cualquier otro descubrimiento inicial.</p>
+                <!-- Reconn -->
+                <h3>Recon</h3>
+                <p>We start by performing a scan of all open TCP ports on the machine with the following command: nmap -p- -sS --min-rate 5000 --open -vvv -n -Pn 10.10.11.182 -oG allPorts</p>
+                <img src="htbpics/photobomb1.jpg" alt="Scan Results" class="responsive">
+
 
                 <!-- Explotación -->
                 <h3>Explotación</h3>
