@@ -26,15 +26,17 @@
 			<div id="main">
 
 				<!-- One -->
-					<section id="one">
-						<header class="major">
-							<h2>MY PORTAFOLIO</h2>
-						</header>
-						<p>A showcase of the machines I've pwned as a pentester.</p>
-						<ul class="actions">
-							<li><a href="#" class="button">Learn More</a></li>
-						</ul>
-					</section>
+            <section id="one">
+                <header class="major">
+                    <h2>MY PORTAFOLIO</h2>
+                </header>
+                <p>A showcase of the machines I've pwned as a pentester.</p>
+           <!-- Search Form -->
+           <form id="search-form">
+              <input type="text" id="search-input" placeholder="Search articles by title or tags..." />
+              <button type="submit" class="button">Search</button>
+           </form>
+            </section>
 
 				<!-- Two -->
 					<section id="two">
@@ -43,6 +45,11 @@
 							<article class="col-6 col-12-xsmall work-item">
 								<a href="htb/photobomb.html" class="image fit thumb"><img src="images/thumbs/photobomb.jpg" alt="" /></a>
 								<h3>PHOTOBOMB</h3>
+                <div class="tags">
+                  <span>Virtual Hosting</span>
+                  <span>Web Enumeration</span>
+                  <span>Information Leakage</span>
+                </div>
 							</article>
 							<article class="col-6 col-12-xsmall work-item">
 								<a href="images/fulls/02.jpg" class="image fit thumb"><img src="images/thumbs/02.jpg" alt="" /></a>
@@ -114,6 +121,7 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+      <script src="assets/js/searches.js"></script>
 
 	</body>
 </html>
