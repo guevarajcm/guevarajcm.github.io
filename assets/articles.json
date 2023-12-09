@@ -1,0 +1,15 @@
+[
+    {
+        "title": "PHOTOBOMB",
+        "image": "images/thumbs/photobomb.jpg",
+        "url": "htb/photobomb.html",
+        "tags": ["Virtual Hosting", "Web Enumeration", "Information Leakage"]
+    },
+    {
+        "title": "Otro Artículo",
+        "image": "images/thumbs/02.jpg",
+        "url": "htb/otro.html",
+        "tags": ["Otro Tag1", "Otro Tag2"]
+    }
+]
+
