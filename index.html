@@ -329,11 +329,6 @@ html:not([data-theme="light"]) .moon{display:none}
   font-size:.74rem;font-family:var(--mono);padding:.24rem .6rem;border-radius:8px;
   background:var(--surface-2);border:1px solid var(--stroke);color:var(--muted);
 }
-.badge-now{
-  font-size:.68rem;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;
-  padding:.2rem .55rem;border-radius:6px;color:#0b1020;font-weight:700;
-  background:linear-gradient(115deg,var(--accent-3),var(--accent));
-}
 .more-toggle{
   margin-top:1.2rem;margin-left:2.2rem;display:inline-flex;align-items:center;gap:.5rem;
   font-family:var(--mono);font-size:.8rem;color:var(--muted);cursor:pointer;
@@ -366,6 +361,12 @@ html:not([data-theme="light"]) .moon{display:none}
   background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 20%,transparent),color-mix(in srgb,var(--accent-2) 16%,transparent));
   border-color:color-mix(in srgb,var(--accent) 40%,transparent);
 }
+.lang-note{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);margin:1.4rem 0 .7rem;padding-top:1rem;border-top:1px dashed var(--stroke);
+}
+.lang-row.learning .lang-top span:first-child{color:var(--muted)}
+.lang-row.learning .bar i{background:linear-gradient(90deg,var(--dim),var(--muted));opacity:.75}
 .lang-row{margin-bottom:1.2rem}
 .lang-row:last-child{margin-bottom:0}
 .lang-top{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:.5rem}
@@ -401,7 +402,8 @@ html:not([data-theme="light"]) .moon{display:none}
 .edu-icon svg{width:22px;height:22px}
 .edu h4{font-size:1.05rem;margin-bottom:.2rem}
 .edu .school{color:var(--accent-3);font-size:.92rem;font-weight:550;margin-bottom:.35rem}
-.edu .when{font-family:var(--mono);font-size:.78rem;color:var(--dim)}
+.edu .when{font-family:var(--mono);font-size:.78rem;color:var(--dim);line-height:1.5}
+.edu .when + .when{margin-top:.2rem;opacity:.85}
 
 /* ============================================================
    CONTACT
@@ -545,8 +547,8 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
         <!-- "Years in tech" counts professional technology roles from INTOP
              Solutions (Mar 2023) onward = 3 yrs 6 mos as of Aug 2026. -->
         <div class="stat"><b data-count="3" data-suffix="+">0</b><span>Years in tech</span></div>
-        <div class="stat"><b data-count="5">0</b><span>Certifications</span></div>
-        <div class="stat"><b data-count="2">0</b><span>Languages</span></div>
+        <div class="stat"><b data-count="6">0</b><span>Certifications</span></div>
+        <div class="stat"><b data-count="2">0</b><span>Working languages</span></div>
       </div>
     </div>
 
@@ -582,8 +584,8 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
 <!-- ================= MARQUEE ================= -->
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
-    <span>Biometrics</span><span>ISO 27001</span><span>Computer Forensics</span><span>Security Operations</span><span>Penetration Testing</span><span>Incident Response</span><span>Technical Support</span>
-    <span>Biometrics</span><span>ISO 27001</span><span>Computer Forensics</span><span>Security Operations</span><span>Penetration Testing</span><span>Incident Response</span><span>Technical Support</span>
+    <span>Biometrics</span><span>ISO 27001</span><span>Computer Forensics</span><span>OSINT Threat Hunting</span><span>Azure AI</span><span>Security Operations</span><span>Penetration Testing</span><span>Incident Response</span><span>Technical Support</span>
+    <span>Biometrics</span><span>ISO 27001</span><span>Computer Forensics</span><span>OSINT Threat Hunting</span><span>Azure AI</span><span>Security Operations</span><span>Penetration Testing</span><span>Incident Response</span><span>Technical Support</span>
   </div>
 </div>
 
@@ -597,14 +599,15 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
     <div class="about-grid">
       <div class="about-text reveal">
         <p>
-          I'm a <strong>Computer Systems Engineer</strong> from the National Technological Institute of Mexico (TecNM), Orizaba Campus who went on to complete a
-          <strong>Master's degree in Cybersecurity</strong> at the International University of La Rioja (UNIR). My path has run
+          I'm a <strong>Computer Systems Engineer</strong> from TecNM Campus Orizaba who went on to complete a
+          <strong>Master's degree in Cybersecurity</strong> at Universidad Internacional de La Rioja (UNIR) in Spain. My path has run
           through security analysis, IT consulting and now enterprise technical support at <strong>Microsoft</strong>.
         </p>
         <p>
-          Two and a half years as an <strong>Associate Security Analyst at Fortra</strong> shaped how I work: monitoring,
-          triaging and escalating threats taught me to stay calm under pressure and to be precise when precision matters most.
-          That foundation now feeds directly into the support engineering work I do today.
+          In parallel I continue as an <strong>Associate Security Analyst at Fortra</strong>, where triaging detections,
+          hunting threats through OSINT and owning high-touch client relationships has taught me to stay calm under
+          pressure and to be precise when precision matters most. That discipline feeds directly into the support
+          engineering work I do at Microsoft.
         </p>
         <p>
           Outside the technical side, I've spent three summers as a <strong>camp counselor and adventure coordinator</strong>
@@ -627,7 +630,7 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
         </div>
         <div class="card focus">
           <div class="focus-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
-          <div><h4>Support &amp; Comms</h4><p>Bilingual technical support with a background in leadership and soft-skills training.</p></div>
+          <div><h4>Support &amp; Comms</h4><p>Bilingual technical support in Spanish and English, with a background in leadership and soft-skills training.</p></div>
         </div>
       </div>
     </div>
@@ -647,7 +650,7 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
       <article class="card tl-item current reveal">
         <div class="tl-head">
           <div>
-            <div class="tl-role">Tech Support Engineer <span class="badge-now">Current</span></div>
+            <div class="tl-role">Tech Support Engineer</div>
             <div class="tl-org">Microsoft</div>
           </div>
           <div class="tl-dates">Jul 2026 — Present</div>
@@ -661,21 +664,28 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
         <div class="tl-tags"><span class="tag">Enterprise Support</span><span class="tag">Troubleshooting</span><span class="tag">Cloud Platforms</span><span class="tag">Customer Success</span></div>
       </article>
 
-      <article class="card tl-item reveal">
+      <article class="card tl-item current reveal">
         <div class="tl-head">
           <div>
             <div class="tl-role">Associate Security Analyst</div>
             <div class="tl-org">Fortra</div>
           </div>
-          <div class="tl-dates">Jan 2024 — Jul 2026 · 2 yrs 7 mos</div>
+          <div class="tl-dates">Jan 2024 — Present · 2 yrs 8 mos</div>
         </div>
         <div class="tl-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Mexico</div>
         <p class="tl-body">
-          Monitored, analyzed and escalated security events as part of the security operations team. Handled alert
-          triage, threat investigation and reporting, applying ISO 27001 controls and forensic methodology to
-          real-world incidents while completing my M.Sc. in Cybersecurity in parallel.
+          Triage analyst for detections surfaced by Fortra's internally owned tooling — reviewing the results those
+          platforms pull in, separating genuine threats from noise, and creating incidents for anything that warrants
+          escalation.
         </p>
-        <div class="tl-tags"><span class="tag">SOC Operations</span><span class="tag">Threat Analysis</span><span class="tag">ISO 27001</span><span class="tag">Incident Response</span><span class="tag">Reporting</span></div>
+        <p class="tl-body" style="margin-top:.85rem">
+          I also carry out <strong>OSINT-driven threat hunting</strong>, tracking threats across social media, public
+          code repositories and dark web sources to surface exposure before it turns into an incident. Alongside the
+          analysis work I partner with the <strong>Customer Support Team</strong> to service client requests through
+          <strong>Jira Service Management</strong>, and I personally handle
+          <strong>2 of our 4 high-touch clients</strong>.
+        </p>
+        <div class="tl-tags"><span class="tag">Alert Triage</span><span class="tag">Incident Creation</span><span class="tag">OSINT</span><span class="tag">Threat Hunting</span><span class="tag">Dark Web Monitoring</span><span class="tag">Jira Service Management</span><span class="tag">High-Touch Clients</span><span class="tag">ISO 27001</span></div>
       </article>
 
       <article class="card tl-item reveal">
@@ -695,7 +705,7 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
         <div class="tl-head">
           <div>
             <div class="tl-role">Social Service Programme</div>
-            <div class="tl-org">National Technological Institute of Mexico (TecNM) — Orizaba Campus</div>
+            <div class="tl-org">TecNM — Campus Orizaba</div>
           </div>
           <div class="tl-dates">Jun 2022 — Dec 2022 · 7 mos</div>
         </div>
@@ -801,6 +811,19 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
         </div>
       </div>
       <div class="card reveal">
+        <h3 class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9zM9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg> AI &amp; Automation</h3>
+        <div class="chips">
+          <span class="chip core">Azure AI Services</span>
+          <span class="chip">Generative AI</span>
+          <span class="chip">Microsoft Copilot</span>
+          <span class="chip">Prompt Engineering</span>
+          <span class="chip">AI-Assisted Triage</span>
+          <span class="chip">Responsible AI</span>
+          <span class="chip">Machine Learning Concepts</span>
+          <span class="chip">Workflow Automation</span>
+        </div>
+      </div>
+      <div class="card reveal">
         <h3 class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg> Languages</h3>
         <div class="lang-row">
           <div class="lang-top"><span>Spanish</span><span>Native / Bilingual</span></div>
@@ -809,6 +832,11 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
         <div class="lang-row">
           <div class="lang-top"><span>English</span><span>Professional Working</span></div>
           <div class="bar"><i data-fill="82%"></i></div>
+        </div>
+        <div class="lang-note">Currently learning</div>
+        <div class="lang-row learning">
+          <div class="lang-top"><span>German</span><span>B1 · In progress</span></div>
+          <div class="bar"><i data-fill="45%"></i></div>
         </div>
         <div class="chips" style="margin-top:1.3rem">
           <span class="chip">Leadership</span>
@@ -846,6 +874,10 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
         <div><h4>Diploma in Systems &amp; Application Security and Auditing</h4><p>Diploma en Seguridad en Sistemas, Aplicaciones y Auditoría</p></div>
       </div>
       <div class="card cert reveal">
+        <div class="cert-badge">🤖</div>
+        <div><h4>Microsoft Certified: Azure AI Fundamentals (AI-901)</h4><p>AI workloads, machine learning &amp; responsible AI on Azure</p></div>
+      </div>
+      <div class="card cert reveal">
         <div class="cert-badge">🚀</div>
         <div><h4>Certificate in Soft Skills &amp; Management Abilities</h4><p>Diplomado en Soft Skills y Habilidades Directivas</p></div>
       </div>
@@ -865,7 +897,8 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
         <div class="edu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></div>
         <div>
           <h4>M.Sc. in Cybersecurity</h4>
-          <div class="school">International University of La Rioja (UNIR)</div>
+          <div class="school">Universidad Internacional de La Rioja (UNIR)</div>
+          <div class="when">International University of La Rioja · Spain</div>
           <div class="when">April 2024 — September 2025</div>
         </div>
       </div>
@@ -873,7 +906,8 @@ footer .mono{font-family:var(--mono);font-size:.78rem}
         <div class="edu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></div>
         <div>
           <h4>B.Eng. in Computer Systems Engineering</h4>
-          <div class="school">National Technological Institute of Mexico (TecNM) — Orizaba Campus</div>
+          <div class="school">TecNM — Campus Orizaba</div>
+          <div class="when">National Technological Institute of Mexico · Veracruz</div>
           <div class="when">August 2018 — August 2023</div>
         </div>
       </div>
